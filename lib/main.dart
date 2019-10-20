@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
+import 'WeatherData/WeatherData.dart';
+
 
 
 void main() => runApp(MyApp());
@@ -99,7 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   case ConnectionState.done:
                     if (!snapshot.hasError)
                     {
-                      return new Text(snapshot.data);
+                      WeatherData weatherData = WeatherData.fromJson(json.decode(snapshot.data));
+                      return new Text(weatherData.main.temp.toString());
                     }
                     return new Text('');
                 }
