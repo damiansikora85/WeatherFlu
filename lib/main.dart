@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -86,8 +87,22 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FutureBuilder(
-              future: http.get('https://api.openweathermap.org/data/2.5/weather?q=wejherowo&APPID=44c1c1b59d62db618da9041d3f35d721&units=metric'),
+              future: http.get('https://api.openweathermap.org/data/2.5/weather?q=wejherowo&APPID=44c1c1b59d62db618da9041d3f35d721&units=metric').then((response) => response.body),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return new Text('Input a URL to start');
+                  case ConnectionState.waiting:
+                    return new Center(child: new CircularProgressIndicator());
+                  case ConnectionState.active:
+                    return new Text('');
+                  case ConnectionState.done:
+                    if (!snapshot.hasError)
+                    {
+                      return new Text(snapshot.data);
+                    }
+                    return new Text('');
+                }
               },
             ),
             Text(
